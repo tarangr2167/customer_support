@@ -6,6 +6,7 @@ Express API with JSON file persistence for the support ticket dashboard.
 
 ```bash
 npm install
+
 ```
 
 ## Run
@@ -13,26 +14,57 @@ npm install
 ```bash
 npm run dev    # development (auto-restart)
 npm start      # production
+
 ```
 
-Server: **http://localhost:3001** (or set `PORT`).
+Server: `http://localhost:3001` (or set `PORT`).
 
 ## Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health check |
-| GET | `/tickets` | List tickets |
-| GET | `/tickets/:id` | Single ticket |
-| POST | `/tickets` | Create ticket |
-| PATCH | `/tickets/:id` | Update status |
-| GET | `/analytics` | Dashboard stats |
 
-### Query params for `GET /tickets`
+| Method | Path         | Description          |
+| ------ | ------------ | -------------------- |
+| POST   | /auth/signup | Register a new user  |
+| POST   | /auth/login  | Login user           |
+| GET    | /tickets     | List tickets         |
+| GET    | /tickets/:id | Get single ticket    |
+| POST   | /tickets     | Create ticket        |
+| PATCH  | /tickets/:id | Update ticket status |
+| GET    | /analytics   | Dashboard statistics |
 
-`search`, `customerName`, `subject`, `status`, `priority`, `page`, `limit`
 
-### Create body
+## Query Parameters for GET /tickets
+
+- `search`
+- `customerName`
+- `subject`
+- `status`
+- `priority`
+- `page`
+- `limit`
+
+## Signup Request Body
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@test.com",
+  "password": "password123",
+  "role": "customer" | "agent"
+}
+```
+
+## Login Request Body
+
+```json
+{
+  "email": "john@test.com",
+  "password": "password123"
+}
+
+```
+
+## Create Ticket Request Body
 
 ```json
 {
@@ -41,6 +73,22 @@ Server: **http://localhost:3001** (or set `PORT`).
   "subject": "Payment Issue",
   "priority": "High"
 }
+
 ```
 
-Data is stored in `data/tickets.json`.
+## Data Storage
+
+All ticket data is stored in:
+
+```text
+data/tickets.json
+
+```
+
+User authentication data is stored in:
+
+```text
+data/users.json
+
+```
+
