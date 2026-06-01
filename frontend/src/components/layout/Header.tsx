@@ -1,5 +1,6 @@
 import { getInitials, useAuth } from '../../context/AuthContext';
 import type { AppView } from './Sidebar';
+import { ThemeToggle } from '../ThemeToggle';
 import { IconSearch } from '../icons';
 
 interface HeaderProps {
@@ -19,9 +20,12 @@ export function Header({ view, search, onSearchChange, onAddTicket }: HeaderProp
 
   return (
     <header className="header">
-      <p className="header__breadcrumb">
-        {breadcrumbs[view]} <span aria-hidden="true">/</span>
-      </p>
+      <div className="header__title-block">
+        <p className="header__breadcrumb">
+          Home <span aria-hidden="true">/</span> {breadcrumbs[view]}
+        </p>
+        <h1 className="header__title">{breadcrumbs[view]}</h1>
+      </div>
 
       <div className="header__search">
         <IconSearch />
@@ -35,6 +39,7 @@ export function Header({ view, search, onSearchChange, onAddTicket }: HeaderProp
       </div>
 
       <div className="header__actions">
+        <ThemeToggle compact />
         <button type="button" className="btn btn--primary" onClick={onAddTicket}>
           + Add Ticket
         </button>

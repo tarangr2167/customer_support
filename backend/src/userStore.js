@@ -13,6 +13,13 @@ const DEFAULT_USERS = [
     name: 'Tarang Ramoliya',
     role: 'agent',
   },
+  {
+    id: '2',
+    email: 'customer@support.com',
+    password: 'customer123',
+    name: 'Jane Customer',
+    role: 'customer',
+  },
 ];
 
 async function ensureUsersFile() {

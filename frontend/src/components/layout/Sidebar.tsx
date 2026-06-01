@@ -1,4 +1,5 @@
 import { getInitials, useAuth } from '../../context/AuthContext';
+import { formatRole } from '../../lib/roles';
 import { IconDashboard, IconTickets } from '../icons';
 
 export type AppView = 'dashboard' | 'tickets';
@@ -18,6 +19,7 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
         <span className="sidebar__brand-text">Ticket Support</span>
       </div>
 
+      <p className="sidebar__section-label">Menu</p>
       <nav className="sidebar__nav" aria-label="Main navigation">
         <button
           type="button"
@@ -47,7 +49,7 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
           <div className="sidebar__user-text">
             <span className="sidebar__welcome">Welcome back</span>
             <strong>{user.name}</strong>
-            <span className="sidebar__role">{user.role}</span>
+            <span className="sidebar__role">{formatRole(user.role)}</span>
           </div>
           <button type="button" className="sidebar__logout" onClick={() => logout()}>
             Log out

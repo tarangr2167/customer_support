@@ -5,7 +5,12 @@ import { readUsers, writeUsers } from './userStore.js';
 const sessions = new Map();
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ROLES = ['agent', 'admin'];
+const SIGNUP_ROLES = ['agent', 'customer'];
+
+/** Roles allowed to change ticket status */
+export function canChangeTicketStatus(role) {
+  return role === 'agent' || role === 'admin';
+}
 
 function publicUser(user) {
   return {
@@ -28,22 +33,25 @@ export function validateSignup(body) {
   const name = String(body.name ?? '').trim();
   const email = String(body.email ?? '').trim().toLowerCase();
   const password = String(body.password ?? '');
+  const role = String(body.role ?? '').trim().toLowerCase();
 
   if (!name) errors.name = 'Name is required';
   if (!email) errors.email = 'Email is required';
   else if (!EMAIL_RE.test(email)) errors.email = 'Invalid email address';
   if (!password) errors.password = 'Password is required';
   else if (password.length < 6) errors.password = 'Password must be at least 6 characters';
+  if (!role) errors.role = 'Please select a role';
+  else if (!SIGNUP_ROLES.includes(role)) errors.role = 'Role must be agent or customer';
 
   return {
     valid: Object.keys(errors).length === 0,
     errors,
-    data: { name, email, password },
+    data: { name, email, password, role },
   };
 }
 
-export async function registerUser({ name, email, password }) {
-  const validation = validateSignup({ name, email, password });
+export async function registerUser({ name, email, password, role }) {
+  const validation = validateSignup({ name, email, password, role });
   if (!validation.valid) {
     return { ok: false, errors: validation.errors };
   }
@@ -60,7 +68,7 @@ export async function registerUser({ name, email, password }) {
     email: validation.data.email,
     password: validation.data.password,
     name: validation.data.name,
-    role: 'agent',
+    role: validation.data.role,
   };
 
   users.push(newUser);
@@ -116,4 +124,13 @@ export function requireAuth(req, res, next) {
   next();
 }
 
-export { ROLES };
+export function requireAgent(req, res, next) {
+  if (!canChangeTicketStatus(req.user?.role)) {
+    return res.status(403).json({
+      error: 'Only agents can update ticket status',
+    });
+  }
+  next();
+}
+
+export { SIGNUP_ROLES };

@@ -1,0 +1,95 @@
+/* Light theme (default) */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  --font: 'Inter', system-ui, sans-serif;
+  --green: #10b981;
+  --green-dark: #047857;
+  --green-light: #d1fae5;
+  --green-tint: #ecfdf5;
+  --green-header: #d1fae5;
+  --green-glow: rgba(16, 185, 129, 0.35);
+
+  --bg: #f1f5f9;
+  --bg-gradient: radial-gradient(ellipse 80% 50% at 100% 0%, rgba(16, 185, 129, 0.08), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(59, 130, 246, 0.05), transparent 45%),
+    var(--bg);
+
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+
+  --sidebar-bg: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  --sidebar-border: rgba(148, 163, 184, 0.2);
+  --sidebar-text: #f8fafc;
+  --sidebar-text-muted: #94a3b8;
+  --sidebar-hover: #1e293b;
+  --sidebar-nav-active-bg: rgba(16, 185, 129, 0.15);
+  --sidebar-nav-active-text: #6ee7b7;
+  --sidebar-user-bg: rgba(255, 255, 255, 0.06);
+
+  --header-bg: rgba(255, 255, 255, 0.82);
+  --header-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+  --overlay: rgba(15, 23, 42, 0.4);
+
+  --input-bg: #f8fafc;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.1);
+
+  --radius: 14px;
+  --sidebar-width: 248px;
+  --mobile-nav-height: 7.5rem;
+
+  --login-bg: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(16, 185, 129, 0.18), transparent 55%),
+    linear-gradient(160deg, #ecfdf5 0%, #f8fafc 45%, #f1f5f9 100%);
+  --login-card-bg: #ffffff;
+  --login-tabs-bg: #f1f5f9;
+}
+
+/* Dark theme — Karciz-style */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --green: #10b981;
+  --green-dark: #34d399;
+  --green-light: rgba(16, 185, 129, 0.25);
+  --green-tint: rgba(16, 185, 129, 0.12);
+  --green-header: rgba(16, 185, 129, 0.22);
+  --green-glow: rgba(16, 185, 129, 0.45);
+
+  --bg: #121417;
+  --bg-gradient: radial-gradient(ellipse 90% 60% at 100% 0%, rgba(16, 185, 129, 0.12), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 0% 100%, rgba(16, 185, 129, 0.06), transparent 50%),
+    var(--bg);
+
+  --surface: #1e2329;
+  --surface-muted: #1a1f26;
+  --text: #ffffff;
+  --text-muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.14);
+
+  --sidebar-bg: #121417;
+  --sidebar-border: rgba(148, 163, 184, 0.1);
+  --sidebar-hover: #1e2329;
+  --sidebar-text: #ffffff;
+  --sidebar-text-muted: #94a3b8;
+  --sidebar-nav-active-bg: rgba(16, 185, 129, 0.15);
+  --sidebar-nav-active-text: #6ee7b7;
+  --sidebar-user-bg: rgba(255, 255, 255, 0.05);
+
+  --header-bg: rgba(30, 35, 41, 0.92);
+  --header-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  --overlay: rgba(0, 0, 0, 0.55);
+
+  --input-bg: #1a1f26;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  --login-bg: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16, 185, 129, 0.15), transparent 55%),
+    linear-gradient(160deg, #0d1014 0%, #121417 50%, #1a1f26 100%);
+  --login-card-bg: #1e2329;
+  --login-tabs-bg: #1a1f26;
+}

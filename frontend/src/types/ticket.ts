@@ -6,6 +6,13 @@ export interface ActivityEntry {
   type: string;
   message: string;
   timestamp: string;
+  agentId?: string;
+  agentName?: string;
+}
+
+export interface TicketClosedBy {
+  agentId: string;
+  agentName: string;
 }
 
 export interface Ticket {
@@ -16,6 +23,7 @@ export interface Ticket {
   priority: TicketPriority;
   status: TicketStatus;
   createdAt: string;
+  closedBy?: TicketClosedBy;
   activity?: ActivityEntry[];
 }
 
@@ -27,6 +35,12 @@ export interface TicketsListResponse {
   totalPages?: number;
 }
 
+export interface AgentPerformance {
+  agentId: string;
+  agentName: string;
+  completed: number;
+}
+
 export interface Analytics {
   total: number;
   open: number;
@@ -35,6 +49,7 @@ export interface Analytics {
   highPriority: number;
   byStatus: Record<TicketStatus, number>;
   byPriority: Record<TicketPriority, number>;
+  agentPerformance: AgentPerformance[];
 }
 
 export interface CreateTicketInput {
