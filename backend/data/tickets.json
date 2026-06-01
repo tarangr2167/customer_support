@@ -74,7 +74,7 @@
     "email": "sam.w@test.com",
     "subject": "Shipping delay inquiry",
     "priority": "Low",
-    "status": "Open",
+    "status": "Closed",
     "createdAt": "2026-01-15",
     "activity": [
       {
@@ -82,6 +82,12 @@
         "type": "created",
         "message": "Ticket created",
         "timestamp": "2026-01-15T13:20:00.000Z"
+      },
+      {
+        "id": "a1780314238116",
+        "type": "status_change",
+        "message": "Status changed from Open to Closed",
+        "timestamp": "2026-06-01T11:43:58.116Z"
       }
     ]
   },

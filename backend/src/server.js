@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { authenticate, registerUser, requireAuth, revokeSession } from './auth.js';
 import { readTickets, writeTickets } from './store.js';
 import { validateCreateTicket, validateStatusUpdate } from './validation.js';
 
@@ -66,10 +67,53 @@ function paginate(items, page, limit) {
 }
 
 app.get('/health', (_req, res) => {
+  res.json({
+    ok: true,
+    auth: true,
+    message: 'Ticket Support API with login and signup',
+  });
+});
+
+app.post('/auth/login', async (req, res, next) => {
+  try {
+    const result = await authenticate(req.body.email, req.body.password);
+    if (!result.ok) {
+      return res.status(401).json({ error: result.error });
+    }
+    res.json({ token: result.token, user: result.user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+async function handleSignup(req, res, next) {
+  try {
+    const result = await registerUser(req.body);
+    if (!result.ok) {
+      if (result.errors) {
+        return res.status(400).json({ error: 'Validation failed', errors: result.errors });
+      }
+      return res.status(409).json({ error: result.error });
+    }
+    res.status(201).json({ token: result.token, user: result.user });
+  } catch (err) {
+    next(err);
+  }
+}
+
+app.post('/auth/signup', handleSignup);
+app.post('/auth/register', handleSignup);
+
+app.get('/auth/me', requireAuth, (req, res) => {
+  res.json({ user: req.user });
+});
+
+app.post('/auth/logout', requireAuth, (req, res) => {
+  revokeSession(req.authToken);
   res.json({ ok: true });
 });
 
-app.get('/tickets', async (req, res, next) => {
+app.get('/tickets', requireAuth, async (req, res, next) => {
   try {
     const tickets = await readTickets();
     const filtered = filterTickets(tickets, req.query);
@@ -84,7 +128,7 @@ app.get('/tickets', async (req, res, next) => {
   }
 });
 
-app.get('/tickets/:id', async (req, res, next) => {
+app.get('/tickets/:id', requireAuth, async (req, res, next) => {
   try {
     const tickets = await readTickets();
     const ticket = tickets.find((t) => t.id === req.params.id);
@@ -97,7 +141,7 @@ app.get('/tickets/:id', async (req, res, next) => {
   }
 });
 
-app.post('/tickets', async (req, res, next) => {
+app.post('/tickets', requireAuth, async (req, res, next) => {
   try {
     const validation = validateCreateTicket(req.body);
     if (!validation.valid) {
@@ -139,7 +183,7 @@ app.post('/tickets', async (req, res, next) => {
   }
 });
 
-app.patch('/tickets/:id', async (req, res, next) => {
+app.patch('/tickets/:id', requireAuth, async (req, res, next) => {
   try {
     const statusValidation = validateStatusUpdate(req.body.status);
     if (!statusValidation.valid) {
@@ -177,7 +221,7 @@ app.patch('/tickets/:id', async (req, res, next) => {
   }
 });
 
-app.get('/analytics', async (_req, res, next) => {
+app.get('/analytics', requireAuth, async (_req, res, next) => {
   try {
     const tickets = await readTickets();
     const byStatus = { Open: 0, 'In Progress': 0, Closed: 0 };
@@ -211,6 +255,21 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
+  console.log('Auth routes: POST /auth/login, POST /auth/signup, GET /auth/me');
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error('');
+    console.error(`Port ${PORT} is already in use by another process (often an OLD backend).`);
+    console.error('Fix on Windows PowerShell:');
+    console.error(`  netstat -ano | findstr :${PORT}`);
+    console.error('  taskkill /PID <pid> /F');
+    console.error('Then run: npm run dev');
+    console.error('');
+    process.exit(1);
+  }
+  throw err;
 });
