@@ -1,6 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
+import { fetchTickets } from '../api/tickets';
+import { ErrorAlert } from '../components/ErrorAlert';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 import { TicketFilters, type FilterState } from '../components/TicketFilters';
 import { TicketList } from '../components/TicketList';
+import { useDebounce } from '../hooks/useDebounce';
 import type { Ticket } from '../types/ticket';
 
 const emptyFilters: FilterState = {
@@ -11,59 +16,63 @@ const emptyFilters: FilterState = {
 };
 
 interface TicketsViewProps {
-  tickets: Ticket[];
   globalSearch: string;
   onSelectTicket: (ticket: Ticket) => void;
 }
 
-function matchesSearch(ticket: Ticket, q: string) {
-  if (!q.trim()) return true;
-  const s = q.trim().toLowerCase();
-  return (
-    ticket.customerName.toLowerCase().includes(s) ||
-    ticket.subject.toLowerCase().includes(s) ||
-    ticket.email.toLowerCase().includes(s) ||
-    ticket.id.includes(s)
-  );
-}
-
-function filterTickets(tickets: Ticket[], filters: FilterState) {
-  return tickets.filter((t) => {
-    const name = filters.customerName.trim().toLowerCase();
-    const subj = filters.subject.trim().toLowerCase();
-    if (name && !t.customerName.toLowerCase().includes(name)) return false;
-    if (subj && !t.subject.toLowerCase().includes(subj)) return false;
-    if (filters.status && t.status !== filters.status) return false;
-    if (filters.priority && t.priority !== filters.priority) return false;
-    return true;
-  });
-}
-
-export function TicketsView({ tickets, globalSearch, onSelectTicket }: TicketsViewProps) {
+export function TicketsView({ globalSearch, onSelectTicket }: TicketsViewProps) {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
+  const debouncedSearch = useDebounce(globalSearch, 300);
+  const debouncedCustomer = useDebounce(filters.customerName, 300);
+  const debouncedSubject = useDebounce(filters.subject, 300);
 
-  const filtered = useMemo(() => {
-    const byFilters = filterTickets(tickets, filters);
-    return byFilters.filter((t) => matchesSearch(t, globalSearch));
-  }, [tickets, filters, globalSearch]);
+  const queryParams = useMemo(
+    () => ({
+      search: debouncedSearch || undefined,
+      customerName: debouncedCustomer || undefined,
+      subject: debouncedSubject || undefined,
+      status: filters.status || undefined,
+      priority: filters.priority || undefined,
+    }),
+    [debouncedSearch, debouncedCustomer, debouncedSubject, filters.status, filters.priority],
+  );
+
+  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
+    queryKey: ['tickets', queryParams],
+    queryFn: () => fetchTickets(queryParams),
+    placeholderData: (prev) => prev,
+  });
+
+  const tickets = data?.data ?? [];
+  const total = data?.total ?? 0;
 
   return (
     <div className="page tickets-page">
       <div className="page-header">
         <h1>All tickets</h1>
-        <p>{filtered.length} tickets found</p>
+        <p>
+          {total} ticket{total === 1 ? '' : 's'} found
+          {isFetching && !isLoading ? ' · updating…' : ''}
+        </p>
       </div>
 
       <div className="panel">
         <TicketFilters filters={filters} onChange={setFilters} />
 
-        {filtered.length === 0 ? (
+        {isLoading ? (
+          <LoadingSpinner label="Loading tickets…" />
+        ) : isError ? (
+          <ErrorAlert
+            message={error instanceof Error ? error.message : 'Failed to load tickets'}
+            onRetry={() => refetch()}
+          />
+        ) : tickets.length === 0 ? (
           <div className="empty-state">
             <h3>No tickets found</h3>
             <p>Adjust your search or filters.</p>
           </div>
         ) : (
-          <TicketList tickets={filtered} onSelect={onSelectTicket} />
+          <TicketList tickets={tickets} onSelect={onSelectTicket} />
         )}
       </div>
     </div>

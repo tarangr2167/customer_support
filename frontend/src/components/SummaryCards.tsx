@@ -1,9 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
+import { fetchAnalytics } from '../api/tickets';
+import { ErrorAlert } from './ErrorAlert';
 import { IconTrendUp } from './icons';
-import type { Ticket } from '../types/ticket';
-
-interface SummaryCardsProps {
-  tickets: Ticket[];
-}
+import { LoadingSpinner } from './LoadingSpinner';
 
 function SummaryCard({
   label,
@@ -26,17 +25,37 @@ function SummaryCard({
   );
 }
 
-export function SummaryCards({ tickets }: SummaryCardsProps) {
-  const open = tickets.filter((t) => t.status === 'Open').length;
-  const inProgress = tickets.filter((t) => t.status === 'In Progress').length;
-  const high = tickets.filter((t) => t.priority === 'High').length;
+export function SummaryCards() {
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ['analytics'],
+    queryFn: fetchAnalytics,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="summary-grid summary-grid--loading">
+        <LoadingSpinner label="Loading stats…" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <ErrorAlert
+        message={error instanceof Error ? error.message : 'Failed to load analytics'}
+        onRetry={() => refetch()}
+      />
+    );
+  }
+
+  if (!data) return null;
 
   return (
     <div className="summary-grid">
-      <SummaryCard label="Open tickets" value={open} trend="↑ 12% Up from last hour" />
-      <SummaryCard label="New tickets" value={tickets.length} trend="↑ 8% Up from yesterday" />
-      <SummaryCard label="In progress" value={inProgress} trend="↑ 5% Up from last hour" />
-      <SummaryCard label="High priority" value={high} trend="↑ 3% Up from last week" />
+      <SummaryCard label="Open tickets" value={data.open} trend="↑ Live from API" />
+      <SummaryCard label="Total tickets" value={data.total} trend="↑ All tickets" />
+      <SummaryCard label="In progress" value={data.inProgress} trend="↑ Active work" />
+      <SummaryCard label="High priority" value={data.highPriority} trend="↑ Needs attention" />
     </div>
   );
 }
