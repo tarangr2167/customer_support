@@ -3,7 +3,9 @@
   display: grid;
   place-items: center;
   padding: 1.5rem;
-  background: linear-gradient(160deg, #ecfdf5 0%, #f8fafc 45%, #f1f5f9 100%);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(16, 185, 129, 0.18), transparent 55%),
+    linear-gradient(160deg, #ecfdf5 0%, #f8fafc 45%, #f1f5f9 100%);
 }
 
 .login-card {
@@ -11,9 +13,9 @@
   max-width: 420px;
   background: #fff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  padding: 2.25rem;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
 }
 
 .login-card__brand {
@@ -23,11 +25,11 @@
 
 .login-card__logo {
   display: inline-block;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
   margin-bottom: 1rem;
 }
 
@@ -100,7 +102,79 @@
 .login-form__submit {
   width: 100%;
   margin-top: 0.5rem;
-  padding: 0.7rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.role-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.role-picker__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.role-picker__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.role-picker__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.75rem 0.85rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    box-shadow 0.15s;
+}
+
+.role-picker__btn:hover {
+  border-color: #cbd5e1;
+  background: #fff;
+}
+
+.role-picker__btn--active.role-picker__btn--agent {
+  border-color: #10b981;
+  background: #ecfdf5;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.role-picker__btn--active.role-picker__btn--customer {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.role-picker__title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.role-picker__hint {
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.role-picker--error .role-picker__options {
+  outline: 2px solid #f87171;
+  outline-offset: 2px;
+  border-radius: 12px;
 }
 
 .login-form__error {

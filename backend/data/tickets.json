@@ -47,6 +47,10 @@
     "priority": "High",
     "status": "Closed",
     "createdAt": "2026-01-05",
+    "closedBy": {
+      "agentId": "2",
+      "agentName": "John Agent"
+    },
     "activity": [
       {
         "id": "a4",
@@ -74,7 +78,7 @@
     "email": "sam.w@test.com",
     "subject": "Shipping delay inquiry",
     "priority": "Low",
-    "status": "Closed",
+    "status": "Open",
     "createdAt": "2026-01-15",
     "activity": [
       {
@@ -88,6 +92,18 @@
         "type": "status_change",
         "message": "Status changed from Open to Closed",
         "timestamp": "2026-06-01T11:43:58.116Z"
+      },
+      {
+        "id": "a1780321162390",
+        "type": "status_change",
+        "message": "Status changed from Closed to In Progress",
+        "timestamp": "2026-06-01T13:39:22.390Z"
+      },
+      {
+        "id": "a1780321163816",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Open",
+        "timestamp": "2026-06-01T13:39:23.816Z"
       }
     ]
   },
@@ -111,6 +127,18 @@
         "type": "status_change",
         "message": "Status changed from Open to In Progress",
         "timestamp": "2026-01-18T09:10:00.000Z"
+      },
+      {
+        "id": "a1780321210470",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Open",
+        "timestamp": "2026-06-01T13:40:10.470Z"
+      },
+      {
+        "id": "a1780321211680",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-06-01T13:40:11.680Z"
       }
     ]
   },
@@ -120,14 +148,60 @@
     "email": "chris@startup.dev",
     "subject": "Invoice PDF not downloading",
     "priority": "Medium",
-    "status": "Open",
+    "status": "Closed",
     "createdAt": "2026-01-20",
+    "closedBy": {
+      "agentId": "1",
+      "agentName": "Tarang Ramoliya"
+    },
     "activity": [
       {
         "id": "a10",
         "type": "created",
         "message": "Ticket created",
         "timestamp": "2026-01-20T11:00:00.000Z"
+      },
+      {
+        "id": "a1780319619115",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-06-01T13:13:39.117Z"
+      },
+      {
+        "id": "a1780319623973",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Closed",
+        "timestamp": "2026-06-01T13:13:43.973Z"
+      },
+      {
+        "id": "a1780319628352",
+        "type": "status_change",
+        "message": "Status changed from Closed to Open",
+        "timestamp": "2026-06-01T13:13:48.353Z"
+      },
+      {
+        "id": "a1780319631197",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-06-01T13:13:51.197Z"
+      },
+      {
+        "id": "a1780321149224",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Open",
+        "timestamp": "2026-06-01T13:39:09.224Z"
+      },
+      {
+        "id": "a1780321153040",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-06-01T13:39:13.040Z"
+      },
+      {
+        "id": "a1780321154740",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Closed",
+        "timestamp": "2026-06-01T13:39:14.740Z"
       }
     ]
   },
@@ -137,7 +211,7 @@
     "email": "tarangramoliya216@gmail.com",
     "subject": "testing",
     "priority": "High",
-    "status": "Open",
+    "status": "Closed",
     "createdAt": "2026-06-01",
     "activity": [
       {
@@ -145,6 +219,12 @@
         "type": "created",
         "message": "Ticket created",
         "timestamp": "2026-06-01T10:24:50.337Z"
+      },
+      {
+        "id": "a1780322355005",
+        "type": "status_change",
+        "message": "Status changed from Open to Closed",
+        "timestamp": "2026-06-01T13:59:15.005Z"
       }
     ]
   }

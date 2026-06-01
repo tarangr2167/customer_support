@@ -8,13 +8,15 @@ function SummaryCard({
   label,
   value,
   trend,
+  accent,
 }: {
   label: string;
   value: number;
   trend: string;
+  accent: 'open' | 'total' | 'progress' | 'priority';
 }) {
   return (
-    <article className="summary-card">
+    <article className={`summary-card summary-card--${accent}`}>
       <span className="summary-card__label">{label}</span>
       <span className="summary-card__value">{value}</span>
       <span className="summary-card__trend">
@@ -52,10 +54,10 @@ export function SummaryCards() {
 
   return (
     <div className="summary-grid">
-      <SummaryCard label="Open tickets" value={data.open} trend="↑ Live from API" />
-      <SummaryCard label="Total tickets" value={data.total} trend="↑ All tickets" />
-      <SummaryCard label="In progress" value={data.inProgress} trend="↑ Active work" />
-      <SummaryCard label="High priority" value={data.highPriority} trend="↑ Needs attention" />
+      <SummaryCard label="Open tickets" value={data.open} trend="Live from API" accent="open" />
+      <SummaryCard label="Total tickets" value={data.total} trend="All tickets" accent="total" />
+      <SummaryCard label="In progress" value={data.inProgress} trend="Active work" accent="progress" />
+      <SummaryCard label="High priority" value={data.highPriority} trend="Needs attention" accent="priority" />
     </div>
   );
 }

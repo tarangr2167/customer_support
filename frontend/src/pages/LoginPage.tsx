@@ -1,8 +1,10 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { ApiError } from '../api/client';
 import { fetchHealth } from '../api/health';
+import { RolePicker } from '../components/RolePicker';
 import { useAuth } from '../context/AuthContext';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import type { SignupRole } from '../lib/roles';
 
 type AuthMode = 'login' | 'signup';
 
@@ -13,6 +15,7 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<SignupRole>('customer');
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +44,7 @@ export function LoginPage() {
     setError('');
     setFieldErrors({});
     setConfirmPassword('');
+    setRole('customer');
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -74,6 +78,7 @@ export function LoginPage() {
           name: name.trim(),
           email: email.trim(),
           password,
+          role,
         });
       }
     } catch (err) {
@@ -105,7 +110,7 @@ export function LoginPage() {
           <p>
             {mode === 'login'
               ? 'Sign in to manage customer tickets'
-              : 'Create your support agent account'}
+              : 'Sign up as an agent or customer'}
           </p>
         </div>
 
@@ -199,6 +204,14 @@ export function LoginPage() {
             </div>
           )}
 
+          {mode === 'signup' && (
+            <RolePicker
+              value={role}
+              onChange={setRole}
+              error={fieldErrors.role}
+            />
+          )}
+
           {error && (
             <p className="login-form__error" role="alert">
               {error}
@@ -219,20 +232,6 @@ export function LoginPage() {
                 : 'Create account'}
           </button>
         </form>
-
-        {mode === 'login' && (
-          <div className="login-demo">
-            <p className="login-demo__title">Demo accounts</p>
-            <ul>
-              <li>
-                <code>tarang@support.com</code> / <code>password123</code>
-              </li>
-              <li>
-                <code>agent@support.com</code> / <code>agent123</code>
-              </li>
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -14,6 +14,13 @@
     "role": "agent"
   },
   {
+    "id": "7",
+    "email": "customer@support.com",
+    "password": "customer123",
+    "name": "Jane Customer",
+    "role": "customer"
+  },
+  {
     "id": "3",
     "email": "admin@support.com",
     "password": "admin123",
@@ -39,6 +46,34 @@
     "email": "tarang123@gmail.com",
     "password": "Testing@123",
     "name": "tarang",
+    "role": "agent"
+  },
+  {
+    "id": "8",
+    "email": "test2@gmail.com",
+    "password": "Testing@123",
+    "name": "Test2",
+    "role": "agent"
+  },
+  {
+    "id": "9",
+    "email": "test3@gmail.com",
+    "password": "Test1234",
+    "name": "test3",
+    "role": "agent"
+  },
+  {
+    "id": "10",
+    "email": "tarang2@gmail.com",
+    "password": "Tarang123",
+    "name": "Tarang2",
+    "role": "customer"
+  },
+  {
+    "id": "11",
+    "email": "tarang1234@gmail.com",
+    "password": "Tarang123",
+    "name": "Tarang123",
     "role": "agent"
   }
 ]

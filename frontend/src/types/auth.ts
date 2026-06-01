@@ -1,4 +1,4 @@
-export type UserRole = 'agent' | 'admin';
+export type UserRole = 'agent' | 'customer' | 'admin';
 
 export interface User {
   id: string;
@@ -20,4 +20,5 @@ export interface SignupInput {
   name: string;
   email: string;
   password: string;
+  role: 'agent' | 'customer';
 }

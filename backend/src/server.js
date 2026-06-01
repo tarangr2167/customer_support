@@ -1,7 +1,15 @@
 import cors from 'cors';
 import express from 'express';
-import { authenticate, registerUser, requireAuth, revokeSession } from './auth.js';
+import { computeAgentPerformance } from './analytics.js';
+import {
+  authenticate,
+  registerUser,
+  requireAgent,
+  requireAuth,
+  revokeSession,
+} from './auth.js';
 import { readTickets, writeTickets } from './store.js';
+import { readUsers } from './userStore.js';
 import { validateCreateTicket, validateStatusUpdate } from './validation.js';
 
 const app = express();
@@ -183,7 +191,7 @@ app.post('/tickets', requireAuth, async (req, res, next) => {
   }
 });
 
-app.patch('/tickets/:id', requireAuth, async (req, res, next) => {
+app.patch('/tickets/:id', requireAuth, requireAgent, async (req, res, next) => {
   try {
     const statusValidation = validateStatusUpdate(req.body.status);
     if (!statusValidation.valid) {
@@ -211,7 +219,15 @@ app.patch('/tickets/:id', requireAuth, async (req, res, next) => {
       type: 'status_change',
       message: `Status changed from ${previousStatus} to ${newStatus}`,
       timestamp: new Date().toISOString(),
+      agentId: req.user.id,
+      agentName: req.user.name,
     });
+
+    if (newStatus === 'Closed') {
+      ticket.closedBy = { agentId: req.user.id, agentName: req.user.name };
+    } else if (previousStatus === 'Closed') {
+      delete ticket.closedBy;
+    }
 
     tickets[index] = ticket;
     await writeTickets(tickets);
@@ -223,7 +239,7 @@ app.patch('/tickets/:id', requireAuth, async (req, res, next) => {
 
 app.get('/analytics', requireAuth, async (_req, res, next) => {
   try {
-    const tickets = await readTickets();
+    const [tickets, users] = await Promise.all([readTickets(), readUsers()]);
     const byStatus = { Open: 0, 'In Progress': 0, Closed: 0 };
     const byPriority = { Low: 0, Medium: 0, High: 0 };
 
@@ -240,6 +256,7 @@ app.get('/analytics', requireAuth, async (_req, res, next) => {
       highPriority: byPriority.High,
       byStatus,
       byPriority,
+      agentPerformance: computeAgentPerformance(tickets, users),
     });
   } catch (err) {
     next(err);
