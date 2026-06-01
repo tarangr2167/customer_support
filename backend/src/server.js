@@ -50,9 +50,14 @@ function filterTickets(tickets, query) {
     result = result.filter((t) => t.priority === priority);
   }
 
-  result.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+  result.sort((a, b) => {
+    const dateDiff =
+      new Date(b.createdAt).getTime() -
+      new Date(a.createdAt).getTime();
+
+    if (dateDiff !== 0) return dateDiff;
+    return Number(b.id) - Number(a.id);
+});
 
   return result;
 }

@@ -15,5 +15,64 @@
         "timestamp": "2026-01-10T09:00:00.000Z"
       }
     ]
+  },
+  {
+    "id": "2",
+    "customerName": "Jigish Patel",
+    "email": "jp09@gmail.com",
+    "subject": "fix design issue",
+    "priority": "High",
+    "status": "Open",
+    "createdAt": "2026-06-01",
+    "activity": [
+      {
+        "id": "a1780331199099",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-06-01T16:26:39.099Z"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "customerName": "Bipinbhai Ramoliya",
+    "email": "bipinramoliya@gmail.com",
+    "subject": "login issue",
+    "priority": "Medium",
+    "status": "In Progress",
+    "createdAt": "2026-06-01",
+    "activity": [
+      {
+        "id": "a1780331239205",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-06-01T16:27:19.205Z"
+      },
+      {
+        "id": "a1780332202929",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-06-01T16:43:22.931Z",
+        "agentId": "1",
+        "agentName": "Tarang Ramoliya"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "customerName": "testing123",
+    "email": "testing123@gmail.com",
+    "subject": "fix customer support",
+    "priority": "High",
+    "status": "Open",
+    "createdAt": "2026-06-01",
+    "activity": [
+      {
+        "id": "a1780332447143",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-06-01T16:47:27.143Z"
+      }
+    ]
   }
 ]
