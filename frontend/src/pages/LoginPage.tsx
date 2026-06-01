@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { ApiError } from '../api/client';
 import { fetchHealth } from '../api/health';
 import { RolePicker } from '../components/RolePicker';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { useAuth } from '../context/AuthContext';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import type { SignupRole } from '../lib/roles';
@@ -103,6 +104,9 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
+      <div className="login-page__theme">
+        <ThemeToggle compact />
+      </div>
       <div className="login-card">
         <div className="login-card__brand">
           <span className="login-card__logo" aria-hidden="true" />
@@ -240,6 +244,9 @@ export function LoginPage() {
 export function LoginLoading() {
   return (
     <div className="login-page">
+      <div className="login-page__theme">
+        <ThemeToggle compact />
+      </div>
       <LoadingSpinner label="Checking session…" />
     </div>
   );

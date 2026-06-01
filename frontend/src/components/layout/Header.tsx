@@ -1,5 +1,6 @@
 import { getInitials, useAuth } from '../../context/AuthContext';
 import type { AppView } from './Sidebar';
+import { ThemeToggle } from '../ThemeToggle';
 import { IconSearch } from '../icons';
 
 interface HeaderProps {
@@ -38,6 +39,7 @@ export function Header({ view, search, onSearchChange, onAddTicket }: HeaderProp
       </div>
 
       <div className="header__actions">
+        <ThemeToggle compact />
         <button type="button" className="btn btn--primary" onClick={onAddTicket}>
           + Add Ticket
         </button>

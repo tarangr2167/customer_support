@@ -1,30 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-:root {
-  --font: 'Inter', system-ui, sans-serif;
-  --green: #10b981;
-  --green-dark: #047857;
-  --green-light: #d1fae5;
-  --green-tint: #ecfdf5;
-  --green-header: #d1fae5;
-  --green-glow: rgba(16, 185, 129, 0.35);
-
-  --bg: #f1f5f9;
-  --bg-sidebar: #0f172a;
-  --bg-sidebar-hover: #1e293b;
-  --surface: #ffffff;
-  --text: #0f172a;
-  --text-muted: #64748b;
-  --text-on-dark: #f8fafc;
-  --text-muted-on-dark: #94a3b8;
-  --border: #e2e8f0;
-  --border-on-dark: rgba(148, 163, 184, 0.2);
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.1);
-  --radius: 14px;
-  --sidebar-width: 248px;
-  --mobile-nav-height: 7.5rem;
-}
+@import './themes.css';
 
 *,
 *::before,
@@ -35,13 +10,13 @@
 body {
   margin: 0;
   font-family: var(--font);
-  background:
-    radial-gradient(ellipse 80% 50% at 100% 0%, rgba(16, 185, 129, 0.08), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(59, 130, 246, 0.05), transparent 45%),
-    var(--bg);
+  background: var(--bg-gradient);
   color: var(--text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition:
+    background 0.25s ease,
+    color 0.2s ease;
 }
 
 #root {
@@ -101,8 +76,8 @@ select {
   width: var(--sidebar-width);
   height: 100vh;
   height: 100dvh;
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  border-right: 1px solid var(--border-on-dark);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
   padding: 1.35rem 1rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -138,7 +113,7 @@ select {
 .sidebar__brand-text {
   font-weight: 700;
   font-size: 1rem;
-  color: var(--text-on-dark);
+  color: var(--sidebar-text);
   letter-spacing: -0.02em;
 }
 
@@ -149,7 +124,7 @@ select {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-muted-on-dark);
+  color: var(--sidebar-text-muted);
 }
 
 .sidebar__nav {
@@ -168,7 +143,7 @@ select {
   border: none;
   border-radius: 10px;
   background: transparent;
-  color: var(--text-muted-on-dark);
+  color: var(--sidebar-text-muted);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -186,20 +161,20 @@ select {
 }
 
 .nav-item:hover {
-  background: var(--bg-sidebar-hover);
-  color: var(--text-on-dark);
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .nav-item--active {
-  background: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
+  background: var(--sidebar-nav-active-bg);
+  color: var(--sidebar-nav-active-text);
   font-weight: 600;
   box-shadow: inset 3px 0 0 var(--green);
 }
 
 .nav-item--active svg {
   opacity: 1;
-  color: #6ee7b7;
+  color: var(--sidebar-nav-active-text);
 }
 
 .sidebar__user {
@@ -208,9 +183,9 @@ select {
   align-items: center;
   gap: 0.75rem;
   padding: 0.9rem;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--sidebar-user-bg);
   border-radius: var(--radius);
-  border: 1px solid var(--border-on-dark);
+  border: 1px solid var(--sidebar-border);
   margin-top: auto;
 }
 
@@ -222,7 +197,7 @@ select {
 .sidebar__role {
   display: block;
   font-size: 0.7rem;
-  color: var(--text-muted-on-dark);
+  color: var(--sidebar-text-muted);
   text-transform: capitalize;
 }
 
@@ -230,10 +205,10 @@ select {
   width: 100%;
   margin-top: 0.25rem;
   padding: 0.45rem 0.5rem;
-  border: 1px solid var(--border-on-dark);
+  border: 1px solid var(--sidebar-border);
   border-radius: 8px;
   background: transparent;
-  color: var(--text-muted-on-dark);
+  color: var(--sidebar-text-muted);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -262,12 +237,12 @@ select {
 .sidebar__welcome {
   display: block;
   font-size: 0.7rem;
-  color: var(--text-muted-on-dark);
+  color: var(--sidebar-text-muted);
 }
 
 .sidebar__user strong {
   font-size: 0.85rem;
-  color: var(--text-on-dark);
+  color: var(--sidebar-text);
 }
 
 /* Header — sticky top bar */
@@ -277,7 +252,7 @@ select {
   align-items: center;
   gap: 1rem;
   padding: 0.9rem 1.75rem;
-  background: rgba(255, 255, 255, 0.82);
+  background: var(--header-bg);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -285,7 +260,8 @@ select {
   flex-shrink: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+  box-shadow: var(--header-shadow);
+  transition: background 0.25s ease;
 }
 
 .header__title-block {
@@ -441,7 +417,7 @@ select {
   height: 36px;
   border: none;
   border-radius: 8px;
-  background: var(--bg);
+  background: var(--input-bg);
   font-size: 1.25rem;
   cursor: pointer;
   color: var(--text-muted);
@@ -723,7 +699,7 @@ select {
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--bg);
+  background: var(--input-bg);
   cursor: pointer;
 }
 
@@ -837,7 +813,7 @@ select {
   padding: 0.55rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--bg);
+  background: var(--input-bg);
 }
 
 .filter-field input:focus,
@@ -900,7 +876,7 @@ select {
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: var(--bg);
+  background: var(--input-bg);
   cursor: pointer;
 }
 
@@ -936,7 +912,7 @@ select {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: var(--overlay);
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -1027,7 +1003,7 @@ select {
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
+  background: var(--overlay);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 90;
@@ -1041,7 +1017,7 @@ select {
   width: min(440px, 100%);
   height: 100%;
   height: 100dvh;
-  background: var(--bg);
+  background: var(--input-bg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1248,7 +1224,7 @@ select {
   padding: 0.7rem 0.75rem;
   border: 2px solid var(--border);
   border-radius: 10px;
-  background: var(--bg);
+  background: var(--input-bg);
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -1328,7 +1304,7 @@ select {
   align-items: center;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  background: var(--bg);
+  background: var(--input-bg);
   border: 1px dashed var(--border);
   border-radius: 10px;
 }
@@ -1615,4 +1591,82 @@ select {
   .ticket-cards {
     display: none !important;
   }
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.2rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.theme-toggle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.55rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.theme-toggle--compact .theme-toggle__btn {
+  padding: 0.45rem;
+}
+
+.theme-toggle__btn:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+
+.theme-toggle__btn--active {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 2px 8px var(--green-glow);
+}
+
+.theme-toggle__btn--active:hover {
+  background: var(--green-dark);
+  color: #fff;
+}
+
+[data-theme='dark'] .form-field input,
+[data-theme='dark'] .form-field select,
+[data-theme='dark'] .filter-field input,
+[data-theme='dark'] .filter-field select,
+[data-theme='dark'] .drawer__status-select {
+  color: var(--text);
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+[data-theme='dark'] .latest-table thead tr,
+[data-theme='dark'] .ticket-table thead tr {
+  background: var(--green-header);
+}
+
+[data-theme='dark'] .latest-table th,
+[data-theme='dark'] .ticket-table th {
+  color: var(--green-dark);
+}
+
+[data-theme='dark'] .icon-btn {
+  background: var(--input-bg);
+  color: var(--text-muted);
+}
+
+[data-theme='dark'] .drawer__close:hover {
+  background: rgba(248, 113, 113, 0.15);
 }
