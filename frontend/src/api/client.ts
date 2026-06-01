@@ -1,3 +1,5 @@
+import { clearStoredToken, getStoredToken } from '../lib/authStorage';
+
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export class ApiError extends Error {
@@ -12,23 +14,39 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+type FetchOptions = RequestInit & { skipAuth?: boolean };
+
+export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
+  const { skipAuth, ...fetchOptions } = options;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(fetchOptions.headers as Record<string, string>),
+  };
+
+  if (!skipAuth) {
+    const token = getStoredToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options?.headers,
-    },
+    ...fetchOptions,
+    headers,
   });
 
   const body = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new ApiError(
-      (body as { error?: string }).error || res.statusText,
-      res.status,
-      body,
-    );
+    if (res.status === 401 && !skipAuth) {
+      clearStoredToken();
+    }
+
+    let message = (body as { error?: string }).error || res.statusText;
+    if (res.status === 404) {
+      message =
+        'Signup/login route not found. Port 3001 is likely running an old backend. See the yellow box above for steps to fix.';
+    }
+
+    throw new ApiError(message, res.status, body);
   }
 
   return body as T;

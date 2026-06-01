@@ -1,3 +1,4 @@
+import { getInitials, useAuth } from '../../context/AuthContext';
 import { IconDashboard, IconTickets } from '../icons';
 
 export type AppView = 'dashboard' | 'tickets';
@@ -8,6 +9,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ active, onNavigate }: SidebarProps) {
+  const { user, logout } = useAuth();
+
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
@@ -36,15 +39,21 @@ export function Sidebar({ active, onNavigate }: SidebarProps) {
         </button>
       </nav>
 
-      <div className="sidebar__user">
-        <span className="sidebar__avatar" aria-hidden="true">
-          TR
-        </span>
-        <div>
-          <span className="sidebar__welcome">Welcome back</span>
-          <strong>Tarang Ramoliya</strong>
+      {user && (
+        <div className="sidebar__user">
+          <span className="sidebar__avatar" aria-hidden="true">
+            {getInitials(user.name)}
+          </span>
+          <div className="sidebar__user-text">
+            <span className="sidebar__welcome">Welcome back</span>
+            <strong>{user.name}</strong>
+            <span className="sidebar__role">{user.role}</span>
+          </div>
+          <button type="button" className="sidebar__logout" onClick={() => logout()}>
+            Log out
+          </button>
         </div>
-      </div>
+      )}
     </aside>
   );
 }

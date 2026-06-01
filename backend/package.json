@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "dev": "node scripts/stop-port.js && node --watch src/server.js",
+    "stop": "node scripts/stop-port.js"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "email": "tarang@support.com",
+    "password": "password123",
+    "name": "Tarang Ramoliya",
+    "role": "agent"
+  },
+  {
+    "id": "2",
+    "email": "agent@support.com",
+    "password": "agent123",
+    "name": "John Agent",
+    "role": "agent"
+  },
+  {
+    "id": "3",
+    "email": "admin@support.com",
+    "password": "admin123",
+    "name": "Admin User",
+    "role": "admin"
+  },
+  {
+    "id": "4",
+    "email": "newuser@test.com",
+    "password": "test123",
+    "name": "Test User",
+    "role": "agent"
+  },
+  {
+    "id": "5",
+    "email": "unique999@test.com",
+    "password": "pass123",
+    "name": "Test User",
+    "role": "agent"
+  },
+  {
+    "id": "6",
+    "email": "tarang123@gmail.com",
+    "password": "Testing@123",
+    "name": "tarang",
+    "role": "agent"
+  }
+]

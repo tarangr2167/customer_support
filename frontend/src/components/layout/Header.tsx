@@ -1,3 +1,4 @@
+import { getInitials, useAuth } from '../../context/AuthContext';
 import type { AppView } from './Sidebar';
 import { IconSearch } from '../icons';
 
@@ -14,6 +15,8 @@ const breadcrumbs: Record<AppView, string> = {
 };
 
 export function Header({ view, search, onSearchChange, onAddTicket }: HeaderProps) {
+  const { user } = useAuth();
+
   return (
     <header className="header">
       <p className="header__breadcrumb">
@@ -35,12 +38,14 @@ export function Header({ view, search, onSearchChange, onAddTicket }: HeaderProp
         <button type="button" className="btn btn--primary" onClick={onAddTicket}>
           + Add Ticket
         </button>
-        <div className="header__profile">
-          <span className="header__avatar" aria-hidden="true">
-            TR
-          </span>
-          <span className="header__name">Tarang Ramoliya</span>
-        </div>
+        {user && (
+          <div className="header__profile">
+            <span className="header__avatar" aria-hidden="true">
+              {getInitials(user.name)}
+            </span>
+            <span className="header__name">{user.name}</span>
+          </div>
+        )}
       </div>
     </header>
   );
