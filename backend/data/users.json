@@ -25,21 +25,21 @@
     "email": "admin@support.com",
     "password": "admin123",
     "name": "Admin User",
-    "role": "admin"
+    "role": "agent"
   },
   {
     "id": "4",
     "email": "newuser@test.com",
     "password": "test123",
     "name": "Test User",
-    "role": "agent"
+    "role": "customer"
   },
   {
     "id": "5",
     "email": "unique999@test.com",
     "password": "pass123",
     "name": "Test User",
-    "role": "agent"
+    "role": "customer"
   },
   {
     "id": "6",
