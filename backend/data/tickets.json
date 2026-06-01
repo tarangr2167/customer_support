@@ -1,0 +1,128 @@
+[
+  {
+    "id": "1",
+    "customerName": "Tarang Ramoliya",
+    "email": "tarang@test.com",
+    "subject": "Payment Issue",
+    "priority": "High",
+    "status": "Open",
+    "createdAt": "2026-01-10",
+    "activity": [
+      {
+        "id": "a1",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-10T09:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "customerName": "Jane Smith",
+    "email": "jane@example.com",
+    "subject": "Cannot reset password",
+    "priority": "Medium",
+    "status": "In Progress",
+    "createdAt": "2026-01-12",
+    "activity": [
+      {
+        "id": "a2",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-12T10:30:00.000Z"
+      },
+      {
+        "id": "a3",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-01-12T14:00:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "customerName": "Alex Rivera",
+    "email": "alex@corp.io",
+    "subject": "Refund request for order #8821",
+    "priority": "High",
+    "status": "Closed",
+    "createdAt": "2026-01-05",
+    "activity": [
+      {
+        "id": "a4",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-05T08:15:00.000Z"
+      },
+      {
+        "id": "a5",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-01-06T11:00:00.000Z"
+      },
+      {
+        "id": "a6",
+        "type": "status_change",
+        "message": "Status changed from In Progress to Closed",
+        "timestamp": "2026-01-08T16:45:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "customerName": "Sam Wilson",
+    "email": "sam.w@test.com",
+    "subject": "Shipping delay inquiry",
+    "priority": "Low",
+    "status": "Open",
+    "createdAt": "2026-01-15",
+    "activity": [
+      {
+        "id": "a7",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-15T13:20:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "customerName": "Maria Garcia",
+    "email": "maria.g@email.com",
+    "subject": "Account locked after failed logins",
+    "priority": "High",
+    "status": "In Progress",
+    "createdAt": "2026-01-18",
+    "activity": [
+      {
+        "id": "a8",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-18T07:45:00.000Z"
+      },
+      {
+        "id": "a9",
+        "type": "status_change",
+        "message": "Status changed from Open to In Progress",
+        "timestamp": "2026-01-18T09:10:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "customerName": "Chris Lee",
+    "email": "chris@startup.dev",
+    "subject": "Invoice PDF not downloading",
+    "priority": "Medium",
+    "status": "Open",
+    "createdAt": "2026-01-20",
+    "activity": [
+      {
+        "id": "a10",
+        "type": "created",
+        "message": "Ticket created",
+        "timestamp": "2026-01-20T11:00:00.000Z"
+      }
+    ]
+  }
+]
