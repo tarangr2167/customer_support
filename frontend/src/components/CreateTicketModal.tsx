@@ -1,41 +1,56 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
-import { PRIORITIES, type Ticket, type TicketPriority } from '../types/ticket';
+import { ApiError } from '../api/client';
+import { createTicket } from '../api/tickets';
+import { PRIORITIES, type CreateTicketInput, type TicketPriority } from '../types/ticket';
 
 interface CreateTicketModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (ticket: Omit<Ticket, 'id' | 'status' | 'createdAt'>) => void;
 }
 
-export function CreateTicketModal({ open, onClose, onCreate }: CreateTicketModalProps) {
-  const [customerName, setCustomerName] = useState('');
-  const [email, setEmail] = useState('');
-  const [subject, setSubject] = useState('');
-  const [priority, setPriority] = useState<TicketPriority>('Medium');
-  const [errors, setErrors] = useState<Record<string, string>>({});
+export function CreateTicketModal({ open, onClose }: CreateTicketModalProps) {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState<CreateTicketInput>({
+    customerName: '',
+    email: '',
+    subject: '',
+    priority: 'Medium',
+  });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const mutation = useMutation({
+    mutationFn: createTicket,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tickets'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics'] });
+      setForm({ customerName: '', email: '', subject: '', priority: 'Medium' });
+      setFieldErrors({});
+      onClose();
+    },
+    onError: (err) => {
+      if (err instanceof ApiError && err.details && typeof err.details === 'object') {
+        const errors = (err.details as { errors?: Record<string, string> }).errors;
+        if (errors) setFieldErrors(errors);
+      }
+    },
+  });
 
   if (!open) return null;
 
-  function validate() {
-    const next: Record<string, string> = {};
-    if (!customerName.trim()) next.customerName = 'Required';
-    if (!email.trim()) next.email = 'Required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = 'Invalid email';
-    if (!subject.trim()) next.subject = 'Required';
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!validate()) return;
-    onCreate({ customerName: customerName.trim(), email: email.trim(), subject: subject.trim(), priority });
-    setCustomerName('');
-    setEmail('');
-    setSubject('');
-    setPriority('Medium');
-    setErrors({});
-    onClose();
+    setFieldErrors({});
+    mutation.mutate({
+      customerName: form.customerName.trim(),
+      email: form.email.trim(),
+      subject: form.subject.trim(),
+      priority: form.priority,
+    });
+  }
+
+  function updateField<K extends keyof CreateTicketInput>(key: K, value: CreateTicketInput[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
   }
 
   return (
@@ -58,39 +73,45 @@ export function CreateTicketModal({ open, onClose, onCreate }: CreateTicketModal
         </header>
 
         <form className="modal__form" onSubmit={handleSubmit} noValidate>
-          <div className={`form-field ${errors.customerName ? 'form-field--error' : ''}`}>
+          <div className={`form-field ${fieldErrors.customerName ? 'form-field--error' : ''}`}>
             <label htmlFor="customerName">Customer name</label>
             <input
               id="customerName"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
+              value={form.customerName}
+              onChange={(e) => updateField('customerName', e.target.value)}
             />
-            {errors.customerName && <span className="field-error">{errors.customerName}</span>}
+            {fieldErrors.customerName && (
+              <span className="field-error">{fieldErrors.customerName}</span>
+            )}
           </div>
 
-          <div className={`form-field ${errors.email ? 'form-field--error' : ''}`}>
+          <div className={`form-field ${fieldErrors.email ? 'form-field--error' : ''}`}>
             <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) => updateField('email', e.target.value)}
             />
-            {errors.email && <span className="field-error">{errors.email}</span>}
+            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
           </div>
 
-          <div className={`form-field ${errors.subject ? 'form-field--error' : ''}`}>
+          <div className={`form-field ${fieldErrors.subject ? 'form-field--error' : ''}`}>
             <label htmlFor="subject">Subject</label>
-            <input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
-            {errors.subject && <span className="field-error">{errors.subject}</span>}
+            <input
+              id="subject"
+              value={form.subject}
+              onChange={(e) => updateField('subject', e.target.value)}
+            />
+            {fieldErrors.subject && <span className="field-error">{fieldErrors.subject}</span>}
           </div>
 
-          <div className="form-field">
+          <div className={`form-field ${fieldErrors.priority ? 'form-field--error' : ''}`}>
             <label htmlFor="priority">Priority</label>
             <select
               id="priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value as TicketPriority)}
+              value={form.priority}
+              onChange={(e) => updateField('priority', e.target.value as TicketPriority)}
             >
               {PRIORITIES.map((p) => (
                 <option key={p} value={p}>
@@ -98,14 +119,21 @@ export function CreateTicketModal({ open, onClose, onCreate }: CreateTicketModal
                 </option>
               ))}
             </select>
+            {fieldErrors.priority && <span className="field-error">{fieldErrors.priority}</span>}
           </div>
+
+          {mutation.isError && Object.keys(fieldErrors).length === 0 && (
+            <p className="field-error" role="alert">
+              {mutation.error instanceof Error ? mutation.error.message : 'Failed to create ticket'}
+            </p>
+          )}
 
           <footer className="modal__footer">
             <button type="button" className="btn btn--ghost" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--primary">
-              Create ticket
+            <button type="submit" className="btn btn--primary" disabled={mutation.isPending}>
+              {mutation.isPending ? 'Creating…' : 'Create ticket'}
             </button>
           </footer>
         </form>
